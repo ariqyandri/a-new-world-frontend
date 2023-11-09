@@ -5,7 +5,7 @@ import { createEnvironment } from "./environmentFactory";
 
 export const environment = createEnvironment({
   production: false,
-  entryFile: 'remoteEntry.js'
+  backend: 'http://localhost:8090'
 });
 
 /*

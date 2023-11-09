@@ -10,7 +10,7 @@ const removeEmpty = (obj: any) => {
 };
 
 export function createEnvironment(defaults: any, configEnv: any = undefined) {
-  configEnv = configEnv || (<any>window)['__config_env'];
-  configEnv = removeEmpty(configEnv);
+  configEnv = configEnv || (<any>window)['__config_env'];  
+  configEnv = configEnv ? removeEmpty(configEnv) : undefined;
   return Object.assign({}, defaults, configEnv);
 }
