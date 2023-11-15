@@ -1,0 +1,51 @@
+.bg {
+  background-color: #000;
+  background: rgb(48, 48, 48);
+  overflow: hidden;
+
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 2px;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.grid-item {
+  aspect-ratio: 1 / 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  color: white;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    z-index: -1;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: 0.1;
+  }
+
+  &:hover {
+    &::after {
+      opacity: 0.12;
+    }
+  }
+}

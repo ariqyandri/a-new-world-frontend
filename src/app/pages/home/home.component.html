@@ -1,11 +1,22 @@
-<div class="h-screen">
-  <div class="h-full flex flex-col justify-center items-center pb-5">
-    <h1 class="text-4xl font-bold">
-      {{message()}}
-    </h1>
-    
-    <p class="mt-2">
-      This is the beginning of an endless journey
-    </p>
+<div class="world" (click)="toggleCities()"></div>
+<div class="text">
+  <h6 class="text-xl uppercase">
+    {{message()}}
+  </h6>
+
+  <div class="flex gap-1">
+    <a [routerLink]="['abc']">
+      write a journal
+    </a>
   </div>
+</div>
+
+<div class="bg h-screen max-h-screen">
+  <ul [ngStyle]="{display: show() ? 'flex':'none'}">
+    <li *ngFor="let city of cities()" 
+      class="hover:color-red"
+      (click)="goToCity(city.name)">
+      {{city.name}}
+    </li>
+  </ul>
 </div>
