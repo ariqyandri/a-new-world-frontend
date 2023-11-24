@@ -5,7 +5,19 @@ import { createEnvironment } from "./environmentFactory";
 
 export const environment = createEnvironment({
   production: true,
-  backend: 'http://localhost:8090'
+  backend: 'http://localhost:8090',
+  grid: {
+    size: 150,
+    bg: {
+      color: '#021c77'
+    },
+    text: {
+      color: '#FFF'
+    },
+    line: {
+      color: '#FFF'
+    },
+  }
 });
 
 /*

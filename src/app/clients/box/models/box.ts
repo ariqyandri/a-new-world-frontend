@@ -54,6 +54,8 @@ export class Value {
   id!: number;
   value!: any;
   property!: Property;
+  item?: Item;
+  box?: Box;
 
   constructor(id: number, value: any, property: Property) {
     this.id = id;

@@ -16,7 +16,7 @@ export class BoxApiService extends Api {
     super(environment.backend)
   }
 
-  get(): Observable<Box[]> {
+  getAll(): Observable<Box[]> {
     return this.http.get<Box[]>(this.url + '/boxes')
   }
 
@@ -33,6 +33,6 @@ export class BoxApiService extends Api {
   }
 
   getConfig(id: number, params: any) {
-    return this.http.get<Box>(this.url + `/boxes/${id}/properties`, { params })
+    return this.http.get<Box>(this.url + `/boxes/${id}/config`, { params })
   }
 }

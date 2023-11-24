@@ -1,0 +1,22 @@
+:host{
+  aspect-ratio: 1 / 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: 0;
+  }
+
+  &:hover {
+    &::after {
+      opacity: 0.12;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+:host {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
