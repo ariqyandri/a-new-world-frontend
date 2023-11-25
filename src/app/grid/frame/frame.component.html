@@ -1,6 +1,6 @@
-<ng-container *ngIf="config$ | async; else loading">
+<ng-container *ngIf="config; else loading">
   <app-grid></app-grid>
-  <app-bar></app-bar>
+  <app-grid-bar></app-grid-bar>
 </ng-container>
 
 <ng-template #loading> ... </ng-template>

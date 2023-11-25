@@ -1,0 +1,9 @@
+:host {
+  position: absolute;
+  opacity: 0;
+  z-index: 1000;
+
+  &:hover {
+    opacity: 1;
+  }
+}

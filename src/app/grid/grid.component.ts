@@ -1,7 +1,6 @@
-import { Component, ElementRef, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, WritableSignal, signal } from '@angular/core';
-import { BehaviorSubject, Subject, config, filter } from 'rxjs';
-import { GridBox, GridConfig } from 'src/app/common/grid/grid';
-import { GridService } from 'src/app/common/grid/grid.service';
+import { Component, ElementRef, HostListener } from '@angular/core';
+import { Grid, GridBox, GridConfig, GridSize } from 'src/app/grid/grid';
+import { GridService } from 'src/app/grid/grid.service';
 
 @Component({
   selector: 'app-grid',
@@ -11,21 +10,24 @@ import { GridService } from 'src/app/common/grid/grid.service';
 export class GridComponent {
   public boxes: GridBox[] = [];
 
+  private _grid?: Grid;
   private _config?: GridConfig;
 
   constructor(
     private elementRef: ElementRef,
     private gridService: GridService,
-    private renderer: Renderer2
   ) {
-    this.gridService.gridConfig$
+    this.gridService.grid$
+      .subscribe((grid) => this._grid = grid);
+
+    this.gridService.config$
       .subscribe((config) => {
         this._config = config;
-        this.setGrid();
+        this.drawGrid();
       });
   }
 
-  setGrid() {
+  drawGrid() {
     if (!this._config) return;
 
     this.setBoxes();
@@ -42,31 +44,32 @@ export class GridComponent {
   }
 
   @HostListener('window:resize', ['$event'])
-  private setBoxes() {
+  setBoxes() {
     if (!this._config) return;
 
     const size = this._config.size,
-      itemsPerRow = Math.floor(window.innerWidth / size),
-      itemsPerColumn = Math.floor(window.innerHeight / size) - 1;
+      rows = Math.floor(window.innerWidth / size),
+      columns = Math.floor(window.innerHeight / size) - 1;
 
     this.boxes = [];
-    // for (let row = itemsPerColumn; row >= 1; row--) {
-    //   for (let col = 1; col <= itemsPerRow; col++) {
-    //     const letter = String.fromCharCode('A'.charCodeAt(0) + row - 1);
-    //     this.boxes.push(new GridBox(row, col));
-    //   }
-    // }
-
-    // const letter = String.fromCharCode('A'.charCodeAt(0) + row - 1);
-
-    for (let row = 1; row <= itemsPerColumn; row++) {
-      for (let col = 1; col <= itemsPerRow; col++) {
-        this.boxes.push(new GridBox(row, col));
+    for (let row = 1; row <= columns; row++) {
+      for (let col = 1; col <= rows; col++) {
+        this.boxes.push(new GridBox(this.boxes.length, row, col));
       }
     }
 
+    this.setSize(rows, columns);
+  }
+
+  setSize(rows: number, columns: number) {
     setTimeout(() => {
-      this.gridService.setHeight((this.elementRef.nativeElement as HTMLElement).offsetHeight)
+      let size = new GridSize()
+      size.height = (this.elementRef.nativeElement as HTMLElement).offsetHeight;
+      size.width = (this.elementRef.nativeElement as HTMLElement).offsetWidth;
+      size.row = rows;
+      size.col = columns;
+
+      this.gridService.setSize(size);
     });
   }
 }
