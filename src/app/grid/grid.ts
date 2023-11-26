@@ -7,34 +7,35 @@ export enum GridCookie {
 }
 
 export class Grid {
-  config: GridConfig = new GridConfig();
+  config: GridConfig
   size: GridSize;
-  active?: GridBox;
+  state?: GridState;
 
-  constructor(config?: GridConfig, size?: GridSize, active?: GridBox) {
+  constructor(config?: GridConfig, size?: GridSize, state?: GridState) {
     this.config = config ?? new GridConfig();
     this.size = size ?? new GridSize();
-    this.active = active;
+    this.state = state ?? undefined;
   }
-
-
 }
 
-/**
- * 
- */
+export type GridState = {
+  [key in GridStateType]?: GridBox;
+}
+export const GRID_STATE_TYPE = ['active', 'highlighted'] as const
+export type GridStateType = typeof GRID_STATE_TYPE[number]
+
 export class GridSize {
   height: number = 0;
   width: number = 0;
-  row: number = 0;
-  col: number = 0;
+  rows: number = 0;
+  columns: number = 0;
 
   get box() {
-    return this.row && this.col ? this.height / this.col : 0;
+    return this.rows && this.columns ? this.height / this.rows : 0;
   }
 
   get total() {
-    return this.row && this.col ? this.row * this.col : 0;
+    return this.rows && this.columns ? this.rows * this.columns : 0;
   }
 }
 

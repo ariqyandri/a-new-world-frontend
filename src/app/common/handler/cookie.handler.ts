@@ -21,7 +21,7 @@ export class CookieHandler {
   public set(name: string, value: string, expires: number | string, path: string = ''): void {
     const _expires = 'expires=' + this._expires(expires).toUTCString()
     const _path = 'path=' + this._path(path)
-
+ 
     document.cookie = `${name}=${encodeURIComponent(value)}; ${_expires}; ${_path};`;
   }
 
@@ -53,8 +53,9 @@ export class CookieHandler {
   private _path(path: string): string {
     let _path = '/' + path
     if (location.protocol === 'https:' && environment.production || !environment.production) {
+      // Secure
       // HttpOnly
-      _path += '; Secure; HttpOnly'
+      _path += ';'
     }
     return _path
   }

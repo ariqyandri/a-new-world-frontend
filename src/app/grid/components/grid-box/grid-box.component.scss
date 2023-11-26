@@ -1,11 +1,12 @@
-:host{
+:host {
   aspect-ratio: 1 / 1;
   position: relative;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 
   &::after {
-    content: '';
+    content: "";
     display: block;
     position: absolute;
     height: 100%;

@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { GridConfig, Grid, GridSize, GridBoxConfig, GridBarConfig, GridWindowConfig, GridBox, GridCookie } from './grid';
+import { BehaviorSubject, Subject, combineLatest, filter } from 'rxjs';
+import { GridConfig, Grid, GridSize, GridBoxConfig, GridBarConfig, GridWindowConfig, GridBox, GridCookie, GridState, GridStateType, GRID_STATE_TYPE } from './grid';
 import { CookieHandler } from '../common/handler/cookie.handler';
 
 
@@ -11,33 +11,30 @@ export class GridService {
   public grid$ = new BehaviorSubject<Grid | undefined>(undefined)
   public size$ = new BehaviorSubject<GridSize | undefined>(undefined)
   public config$ = new BehaviorSubject<GridConfig | undefined>(undefined)
-  public active$ = new BehaviorSubject<GridBox | undefined>(undefined)
+  public state$ = new BehaviorSubject<GridState | undefined>(undefined)
 
   private _grid?: Grid
 
   constructor(private cookieHandler: CookieHandler) {
-    this.grid$.subscribe((grid) => this._grid = grid)
+    this.grid$
+      .subscribe((grid) => this._grid = grid)
 
-    this.config$.subscribe((config) => {
-      const grid = this._grid ? { ...this._grid, config } as Grid : new Grid(config);
-      this.grid$.next(grid);
-    })
+    this.config$
+      .pipe(filter((config) => config !== undefined))
+      .subscribe((config) => this.updateGrid('config', config as GridConfig))
 
-    this.size$.subscribe((size) => {
-      const grid = this._grid ? { ...this._grid, size } as Grid : new Grid(undefined, size);
-      this.grid$.next(grid);
-    })
+    this.size$
+      .pipe(filter((size) => size !== undefined))
+      .subscribe((size) => this.updateGrid('size', size as GridSize))
 
-    this.active$.subscribe((active) => {
-      const grid = this._grid ? { ...this._grid, active } as Grid : new Grid(undefined, undefined, active);
-      this.grid$.next(grid);
-    })
+    this.state$
+      .pipe(filter((state) => state !== undefined))
+      .subscribe((state) => this.updateGrid('state', state as GridState))
 
   }
 
   public init(config?: GridConfig, size?: GridSize) {
-    // For now we use cookie, in the future and API
-    this.setConfig(this._getConfig(config));
+    this.setConfig(config ?? new GridConfig());
     this.setSize(size ?? new GridSize());
   }
 
@@ -53,16 +50,43 @@ export class GridService {
     this.size$.next(size)
   }
 
-  public setActive(active?: GridBox) {
-    this.active$.next(active)
+  public setState(state?: GridBox, type?: GridStateType) {
+    let _state: GridState = this.state$.getValue() || {} as GridState
+    if (type) {
+      _state[type] = state
+    } else {
+      GRID_STATE_TYPE.forEach((type) => _state[type] = state)
+    }    
+
+    this.state$.next(_state)
   }
 
-  private _getConfig(config?: GridConfig) {
+  public updateGrid(attribute: 'config' | 'size' | 'state', value: GridConfig | GridSize | GridState) {
+    if (this._grid) {
+      const grid = this._grid;
+      switch (attribute) {
+        case 'config':
+          grid.config = value as GridConfig;
+          break;
+        case 'size':
+          grid.size = value as GridSize;
+          break;
+        case 'state':
+          grid.state = value as GridState;
+          break;
+      }
+      this.grid$.next(grid);
+    }
+  }
+
+  private _getCookieConfig(config?: GridConfig) {
     if (config) {
+      this.cookieHandler.set(GridCookie.CONFIG, JSON.stringify(config), 100)
       return config;
     }
 
     let _config = this.cookieHandler.get(GridCookie.CONFIG)
+
     if (_config) {
       return JSON.parse(_config)
     } else {

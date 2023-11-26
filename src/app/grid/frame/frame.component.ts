@@ -12,7 +12,7 @@ export class FrameComponent implements OnDestroy {
   public config?: GridConfig;
 
   constructor(
-    private elementRef: ElementRef,
+    private el: ElementRef,
     private gridService: GridService
   ) {
     this.gridService.init()
@@ -30,7 +30,7 @@ export class FrameComponent implements OnDestroy {
   setStyling() {
     if (!this.config) return;
 
-    const el = this.elementRef.nativeElement as HTMLElement
+    const el = this.el.nativeElement as HTMLElement
     el.style.background = this.config.background.color
   }
 }

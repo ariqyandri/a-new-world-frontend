@@ -1,3 +1,7 @@
-<div class="h-full w-full flex justify-center items-center">
-  {{ box?.id }}
+<div
+  *ngIf="box"
+  class="h-full w-full flex justify-center items-center"
+  [ngClass]="(highlighted$ | async) ? 'highlighted' : ''"
+>
+  <div>{{ box.row }} : {{ box.col }}</div>
 </div>
