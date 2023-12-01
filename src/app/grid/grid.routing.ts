@@ -1,12 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FrameComponent } from './frame/frame.component';
+import { PlayComponent } from './pages/play/play.component';
+import { GridComponent } from './grid.component';
+import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: FrameComponent
+    component: MainComponent,
+  },
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: 'play',
+        pathMatch: 'full',
+        component: PlayComponent
+      }
+    ]
   },
 ];
 

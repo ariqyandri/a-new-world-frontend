@@ -1,83 +1,85 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { Grid, GridBox, GridConfig, GridSize } from 'src/app/grid/grid';
-import { GridService } from 'src/app/grid/grid.service';
+import { Component, ElementRef, HostListener, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject, config, firstValueFrom, takeUntil } from 'rxjs';
+import { Grid, GridConfig, GridDetails } from 'src/app/grid/models/grid';
+import { GridService } from 'src/app/grid/services/grid.service';
+import { GridBox } from './models/grid-box';
+import { GridBoxesDetails } from './models/grid-boxes';
 
 @Component({
   selector: 'app-grid',
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
-export class GridComponent {
-  public boxes: GridBox[] = [];
-
-  private _grid?: Grid;
-  private _config?: GridConfig;
-  private _destroyed$ = new Subject<void>()
-  ngOnDestroy(): void {
-    this._destroyed$.next();
-    this._destroyed$.complete();
-  }
+export class GridComponent implements OnDestroy {
+  public grid$!: BehaviorSubject<Grid | undefined>;
 
   constructor(
     private el: ElementRef,
-    private gridService: GridService,
+    private gridService: GridService
   ) {
-    this.gridService.grid$
-      .pipe(takeUntil(this._destroyed$))
-      .subscribe((grid) => this._grid = grid);
-
-    this.gridService.config$
-      .pipe(takeUntil(this._destroyed$))
-      .subscribe((config) => {
-        this._config = config;
-        this.drawGrid();
-      });
+    this.build();
+    this.grid$ = this.gridService.grid$;
   }
 
-  drawGrid() {
-    if (!this._config) return;
-
-    this.setBoxes();
-    this.setStyling();
+  ngOnDestroy(): void {
+    this.gridService.destroy();
   }
 
-  setStyling() {
-    if (!this._config) return;
+  async build(grid?: Grid) {
+    const _grid = grid ?? await this.gridService.build()
+    const config = _grid?.config
+    if (!config) return;
 
-    const el = this.el.nativeElement as HTMLElement;
-    el.style.background = this._config.line.color;
-    el.style.gap = this._config.line.width + 'px';
-    el.style.gridTemplateColumns = `repeat(auto-fill, minmax(${this._config.size}px, 1fr))`
+    const size = config.size;
+    const columns = Math.floor(window.innerWidth / size);
+    const rows = Math.floor(window.innerHeight / size)
+
+    const el = this.el.nativeElement as HTMLElement
+
+    let details = grid ? grid.details : new GridDetails();
+    details.height = el.offsetHeight;
+    details.width = el.offsetWidth;
+    details.rows = rows;
+    details.columns = columns;
+    details.total = rows * columns;
+    details.boxHeight = details.height / details.rows;
+    details.boxWidth = details.width / details.columns;
+
+    this.gridService.update('details', details)
   }
+
 
   @HostListener('window:resize', ['$event'])
-  setBoxes() {
-    if (!this._config) return;
-
-    const size = this._config.size,
-      rows = Math.floor(window.innerHeight / size) - 1,
-      columns = Math.floor(window.innerWidth / size);
-
-    this.boxes = [];
-    for (let row = 1; row <= rows; row++) {
-      for (let col = 1; col <= columns; col++) {
-        this.boxes.push(new GridBox(this.boxes.length, row, col));
-      }
-    }
-
-    this.setSize(rows, columns);
-  }
-
-  setSize(rows: number, columns: number) {
-    setTimeout(() => {
-      let size = new GridSize()
-      size.height = (this.el.nativeElement as HTMLElement).offsetHeight;
-      size.width = (this.el.nativeElement as HTMLElement).offsetWidth;
-      size.rows = rows;
-      size.columns = columns;
-
-      this.gridService.setSize(size);
-    });
+  async resize() {
+    this.build(await firstValueFrom(this.grid$))
   }
 }
+
+// implements OnDestroy {
+//   public grid$ ?: BehaviorSubject<Grid | undefined>;
+
+//   private _destroyed$ = new Subject<void>()
+//   ngOnDestroy(): void {
+//     this._destroyed$.next();
+//     this._destroyed$.complete();
+//   }
+
+//   constructor(
+//     private el: ElementRef,
+//     private gridService: GridService
+//   ) {
+//     this.grid$ = this.gridService.grid$;
+//     this.gridService.config$
+//       .pipe(takeUntil(this._destroyed$))
+//       .subscribe((res) => this.setStyling(res));
+//     this.gridService.details$
+//       .subscribe();
+//   }
+
+//   setStyling(config ?: GridConfig) {
+//     if (!config) return;
+
+//     const el = this.el.nativeElement as HTMLElement;
+//     el.style.background = config.background.color;
+//   }
+// }

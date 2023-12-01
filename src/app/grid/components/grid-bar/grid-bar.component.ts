@@ -1,15 +1,18 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
-import { BehaviorSubject, Subject, combineLatest, takeUntil } from 'rxjs';
-import { GridBarConfig, GridBox, GridConfig, GridSize } from 'src/app/grid/grid';
-import { GridService } from 'src/app/grid/grid.service';
+import { Component, ElementRef, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject, firstValueFrom, takeUntil } from 'rxjs';
+import { GridService } from 'src/app/grid/services/grid.service';
+import { GridBarService } from '../../services/grid-bar.service';
+import { GridBar } from '../../models/grid-bar';
+import { GridConfig, GridDetails } from '../../models/grid';
 
 @Component({
   selector: 'app-grid-bar',
   templateUrl: './grid-bar.component.html',
   styleUrl: './grid-bar.component.scss'
 })
-export class GridBarComponent {
-  private _config?: GridBarConfig;
+export class GridBarComponent implements OnDestroy {
+  public bar$?: BehaviorSubject<GridBar | undefined>
+
   private _destroyed$ = new Subject<void>()
   ngOnDestroy(): void {
     this._destroyed$.next();
@@ -18,32 +21,46 @@ export class GridBarComponent {
 
   constructor(
     private el: ElementRef,
-    private gridService: GridService
+    private gridService: GridService,
+    private barService: GridBarService
   ) {
-    combineLatest([this.gridService.config$, this.gridService.size$])
-      .pipe(takeUntil(this._destroyed$))
-      .subscribe(([config, size]) => {
-        this._config = config?.gridBar;
-        this.setStyling(config);
-        this.setDimensions(size, config);
+    this.register();
+    this.draw()
+  }
+
+  async register() {
+    await firstValueFrom(this.gridService.draw$)
+      .then(() => {
+        this.barService.build(this)
+        this.bar$ = this.barService.bar$
       })
   }
 
-  setStyling(gridConfig?: GridConfig) {
-    if (!this._config || !gridConfig) return;
-
-    const el = this.el.nativeElement as HTMLElement;
-    el.style.background = this._config.color;
-    el.style.color = gridConfig.text.color;
-    el.style.borderTopWidth = gridConfig.line.width + 'px';
-    el.style.borderTopColor = gridConfig.line.color;
+  async draw() {
+    this.gridService.draw()
+      .pipe(takeUntil(this._destroyed$))
+      .subscribe(({ config, details }) => {
+        this.setStyling(config);
+        this.setDimensions(config, details);
+      })
   }
 
-  setDimensions(size?: GridSize, gridConfig?: GridConfig) {
-    if (!size || !gridConfig) return;
+  setStyling(config?: GridConfig) {
+    if (!config) return;
 
     const el = this.el.nativeElement as HTMLElement;
-    el.style.height = (window.innerHeight - size.height - gridConfig?.line.width) + 'px';
-    el.style.top = size.height + 'px';
+    el.style.background = config.bar.color;
+    el.style.color = config.text.color;
+    el.style.fontFamily = config.text.fontFamily;
+    el.style.borderTopWidth = config.line.width + 'px';
+    el.style.borderTopColor = config.line.color;
+  }
+
+  setDimensions(config?: GridConfig, details?: GridDetails) {
+    if (!config || !details) return;
+
+    const el = this.el.nativeElement as HTMLElement;
+    el.style.height = details.boxHeight + 'px';
+    el.style.width = (details.bar?.width || details.width) + 'px';
   }
 }

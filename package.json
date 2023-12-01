@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "construct": "ng g c",
+    "construct:all": "npm run construct --page=page-window && npm run construct --page=page-bar && npm run construct --page=page-box",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

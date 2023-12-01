@@ -1,8 +1,29 @@
+// :host{
+//   display: block;
+//   max-height: 100vh;
+//   height: 100vh;
+//   overflow: hidden;
+
+//   -ms-overflow-style: none;  /* IE and Edge */
+//   scrollbar-width: none;  /* Firefox */
+//   &::-webkit-scrollbar {
+//     display: none;
+//   }
+// }
 :host {
-  display: grid;
-  position: relative;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  max-width: 100%;
-  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 100vh;
+  height: 100vh;
   overflow: hidden;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  div {
+    border: blue 1px solid;
+  }
 }

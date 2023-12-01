@@ -1,4 +1,3 @@
-import { GridWindowView } from "src/app/grid/grid";
 import { IEnvironment } from "./environment.model";
 import { createEnvironment } from "./environmentFactory";
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -8,7 +7,7 @@ import { createEnvironment } from "./environmentFactory";
 export const environment: IEnvironment = createEnvironment({
   production: false,
   backend: 'http://localhost:8090',
-  grid: {
+  config: {
     size: 150,
     background: {
       color: '#FFF',
@@ -22,17 +21,19 @@ export const environment: IEnvironment = createEnvironment({
       color: '#FFF',
       width: 1
     },
-    gridBar: {
+    bar: {
       color: '#021c77'
     },
-    gridWindow: {
-      color: '#021c77',
-      view: 'WINDOW'
-    },
-    gridBox: {
+    window: {
       color: '#021c77'
     },
-  }
+    box: {
+      color: '#021c77'
+    },
+    boxes: {
+      color: '#021c77'
+    }
+  },
 });
 
 /*

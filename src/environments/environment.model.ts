@@ -1,7 +1,7 @@
-import { GridConfig } from "src/app/grid/grid";
+import { GridConfig } from "src/app/grid/models/grid";
 
 export interface IEnvironment {
   production: boolean,
   backend: string,
-  grid: GridConfig
+  config: GridConfig
 }

@@ -1,7 +1,8 @@
-<div
-  *ngIf="box"
-  class="h-full w-full flex justify-center items-center"
-  [ngClass]="(highlighted$ | async) ? 'highlighted' : ''"
->
-  <div>{{ box.row }} : {{ box.col }}</div>
-</div>
+<ng-container *ngIf="box$ | async as box">
+  <div
+    class="h-full w-full flex justify-center items-center"
+    [ngClass]="box.active ? 'highlighted' : ''"
+  >
+    <!-- <div>{{ data$ | async }}</div> -->
+  </div>
+</ng-container>

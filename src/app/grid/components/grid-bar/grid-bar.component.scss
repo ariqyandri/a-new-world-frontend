@@ -1,9 +1,8 @@
 :host {
   display: block;
   position: absolute;
-  box-sizing: content-box;
+  box-sizing: border-box;
   left: 0;
+  bottom: 0;
   width: 100%;
-
-  
 }

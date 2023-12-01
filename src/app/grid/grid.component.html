@@ -1,2 +1,7 @@
-<app-grid-box *ngFor="let box of boxes" [box]="box"> </app-grid-box>
-<app-grid-window></app-grid-window>
+<ng-container *ngIf="grid$ | async; else loading">
+  <app-grid-boxes></app-grid-boxes>
+  <app-grid-bar></app-grid-bar>
+  <app-grid-window></app-grid-window>
+</ng-container>
+
+<ng-template #loading></ng-template>
