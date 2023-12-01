@@ -1,3 +1,11 @@
-<ng-container *ngIf="bar$ | async"> 
-  bar
-</ng-container>
+<div #boxesContainer class="boxes">
+  <ng-container *ngIf="bar$">
+    <app-grid-box
+      #box
+      *ngFor="let box of boxes"
+      [box]="box"
+      [container]="'bar'"
+    >
+    </app-grid-box>
+  </ng-container>
+</div>

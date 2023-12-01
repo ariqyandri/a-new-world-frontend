@@ -1,14 +1,19 @@
-import { GridUnit, GridUnitConfig } from "./grid-unit";
+import { BackgroundConfig, IGridUnit, IGridUnitConfig, LineConfig, TextConfig } from "./grid";
 import { GridBarComponent } from "../components/grid-bar/grid-bar.component";
 import { environment } from "src/environments/environment";
+import { GridBox } from "./grid-box";
 
-export const config = environment.config.bar
+export const config = environment.config.bar as GridBarConfig
 
-export class GridBar extends GridUnit {
-  override component?: GridBarComponent;
-  override details: GridBarDetails = new GridBarDetails();
-  override config: GridBarConfig = new GridBarConfig();
+export class GridBar implements IGridUnit {
+  component?: GridBarComponent;
+  details: GridBarDetails = new GridBarDetails();
+  config: GridBarConfig = new GridBarConfig();
 
+  active: Boolean = true;
+  elements: { [key: string]: GridBox } = {};
+
+  constructor() { }
 }
 
 export class GridBarDetails {
@@ -16,8 +21,13 @@ export class GridBarDetails {
   width: number = 0;
 }
 
-export class GridBarConfig extends GridUnitConfig {
+export class GridBarConfig implements IGridUnitConfig {
+  text?: TextConfig;
+  background?: BackgroundConfig;
+  line?: LineConfig;
   constructor() {
-    super(config.color)
+    this.text = new TextConfig(config?.text?.color)
+    this.background = new BackgroundConfig(config?.background?.color)    
+    this.line = new LineConfig(config?.line?.color)
   }
 }

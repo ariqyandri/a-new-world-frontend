@@ -44,7 +44,7 @@ export class GridComponent implements OnDestroy {
     details.total = rows * columns;
     details.boxHeight = details.height / details.rows;
     details.boxWidth = details.width / details.columns;
-
+    
     this.gridService.update('details', details)
   }
 

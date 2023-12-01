@@ -10,7 +10,7 @@ export const environment: IEnvironment = createEnvironment({
   config: {
     size: 150,
     background: {
-      color: '#FFF',
+      color: '#021c77',
       image: undefined
     },
     text: {
@@ -21,18 +21,62 @@ export const environment: IEnvironment = createEnvironment({
       color: '#FFF',
       width: 1
     },
-    bar: {
-      color: '#021c77'
-    },
-    window: {
-      color: '#021c77'
-    },
-    box: {
-      color: '#021c77'
-    },
-    boxes: {
-      color: '#021c77'
-    }
+    // bar: {
+    //   background: {
+    //     color: '#021c77',
+    //     image: undefined
+    //   },
+    //   text: {
+    //     color: '#FFF',
+    //     fontFamily: 'Helvetica'
+    //   },
+    //   line: {
+    //     color: '#FFF',
+    //     width: 1
+    //   },
+    // },
+    // window: {
+    //   background: {
+    //     color: '#021c77',
+    //     image: undefined
+    //   },
+    //   text: {
+    //     color: '#FFF',
+    //     fontFamily: 'Helvetica'
+    //   },
+    //   line: {
+    //     color: '#FFF',
+    //     width: 1
+    //   },
+    // },
+    // box: {
+    //   background: {
+    //     color: '#021c77',
+    //     image: undefined
+    //   },
+    //   text: {
+    //     color: '#FFF',
+    //     fontFamily: 'Helvetica'
+    //   },
+    //   line: {
+    //     color: '#FFF',
+    //     width: 1
+    //   },
+    // },
+    // boxes: {
+    //   background: {
+    //     color: '#021c77',
+    //     image: undefined
+    //   },
+    //   text: {
+    //     color: '#FFF',
+    //     fontFamily: 'Helvetica'
+    //   },
+    //   line: {
+    //     color: '#FFF',
+    //     width: 1
+    //   },
+    // }
   },
 });
 

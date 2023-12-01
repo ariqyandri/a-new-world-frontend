@@ -1,17 +1,20 @@
 import { GridBox } from "./grid-box";
-import { GridUnit, GridUnitConfig } from "./grid-unit";
+import { BackgroundConfig, IGridUnit, IGridUnitConfig, LineConfig, TextConfig } from "./grid";
 import { GridBoxesComponent } from "../components/grid-boxes/grid-boxes.component";
 import { environment } from "src/environments/environment";
 
 export const config = environment.config.boxes as GridBoxesConfig
 
-export class GridBoxes extends GridUnit {
-  override component?: GridBoxesComponent;
-  override details: GridBoxesDetails = new GridBoxesDetails();
-  override config: GridBoxesConfig = new GridBoxesConfig();
+export class GridBoxes implements IGridUnit {
+  template?: any;
+  component?: GridBoxesComponent;
+  details: GridBoxesDetails = new GridBoxesDetails();
+  config: GridBoxesConfig = new GridBoxesConfig();
 
-  active?: GridBox = undefined;
-  elements: GridBox[] = [];
+  active?: GridBox;
+  elements: { [key: string]: GridBox } = {};
+
+  constructor() { }
 }
 
 export class GridBoxesDetails {
@@ -23,8 +26,13 @@ export class GridBoxesDetails {
   box: number = 0;
 }
 
-export class GridBoxesConfig extends GridUnitConfig {
+export class GridBoxesConfig implements IGridUnitConfig {
+  text?: TextConfig;
+  background?: BackgroundConfig;
+  line?: LineConfig;
   constructor() {
-    super(config.color)
+    this.text = new TextConfig(config?.text?.color)
+    this.background = new BackgroundConfig(config?.background?.color)    
+    this.line = new LineConfig(config?.line?.color)
   }
 }

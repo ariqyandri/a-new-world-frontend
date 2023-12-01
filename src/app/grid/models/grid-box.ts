@@ -1,12 +1,27 @@
-import { GridUnit, GridUnitConfig } from "./grid-unit";
+import { BackgroundConfig, IGridUnit, IGridUnitConfig, LineConfig, TextConfig } from "./grid";
 import { GridBoxComponent } from "../components/grid-box/grid-box.component";
 import { environment } from "src/environments/environment";
 
 export const config = environment.config.boxes as GridBoxConfig
 
-export class GridBox extends GridUnit {
-  override component?: GridBoxComponent;
-  override details: GridBoxDetails = new GridBoxDetails();
+export class GridBoxCollection {
+  /**
+   * Name of collection
+   */
+  [key: string]: {
+    /**
+     * ID of box
+     */
+    [key: string]: GridBox | undefined
+  };
+}
+
+export class GridBox implements IGridUnit {
+  template: any;
+  component?: GridBoxComponent;
+  details: GridBoxDetails = new GridBoxDetails();
+  config: GridBoxConfig = new GridBoxConfig();
+  data: any
 
   active: boolean = false;
   index!: number;
@@ -17,7 +32,6 @@ export class GridBox extends GridUnit {
   };
 
   constructor(index: number, row: number, col: number) {
-    super()
     this.index = index;
     this.row = row;
     this.col = col;
@@ -29,8 +43,13 @@ export class GridBoxDetails {
   width: number = 0;
 }
 
-export class GridBoxConfig extends GridUnitConfig {
+export class GridBoxConfig implements IGridUnitConfig {
+  text?: TextConfig;
+  background?: BackgroundConfig;
+  line?: LineConfig;
   constructor() {
-    super(config.color)
+    this.text = new TextConfig(config?.text?.color)
+    this.background = new BackgroundConfig(config?.background?.color)    
+    this.line = new LineConfig(config?.line?.color)
   }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, map } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, map } from 'rxjs';
 import { GridWindowComponent } from '../components/grid-window/grid-window.component';
 import { GridWindow } from '../models/grid-window';
 import { GridService } from './grid.service';
+import { GridBox } from '../models/grid-box';
 
 
 @Injectable({
@@ -11,24 +12,44 @@ import { GridService } from './grid.service';
 export class GridWindowService {
   public window$ = new BehaviorSubject<GridWindow | undefined>(undefined)
 
+  private _window?: GridWindow;
   constructor(
     private gridService: GridService
   ) {
-    // this.gridService.grid$
-    //   .pipe(map((res) => res?.window))
-    //   .subscribe((res) => this.window$.next(res))
+    this.window$.subscribe((res) => this._window = res);
   }
 
-  public build(component: GridWindowComponent) {
+  public register(component: GridWindowComponent) {
     let window = new GridWindow();
     window.component = component
-    // console.log(component);
 
-    this.window$.next(window);
-    this.gridService.update('window', window);
+    this._window = window;
+    this._update()
+  }
+
+  public activate(box: GridBox): void {
+    if (this._window) {
+      this._window.active = box;
+      this._update();
+    }
+  }
+  public deactivate(): void {
+    if (this._window) {
+      this._window.active = undefined;
+      this._update();
+    }
+  }
+
+  public active(): Observable<GridBox | undefined> {
+    return this.window$.pipe(map((res) => res?.active))
   }
 
   public get(key: keyof GridWindow): Promise<unknown> {
     return firstValueFrom(this.window$.pipe(map((res) => res?.[key])))
+  }
+
+  private _update() {
+    this.window$.next(this._window);
+    this.gridService.update('window', this._window);
   }
 }

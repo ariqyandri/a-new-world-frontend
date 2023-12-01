@@ -1,16 +1,19 @@
 import { environment } from "src/environments/environment";
 import { GridBox } from "./grid-box";
-import { GridUnit, GridUnitConfig } from "./grid-unit";
+import { BackgroundConfig, IGridUnit, IGridUnitConfig, LineConfig, TextConfig } from "./grid";
 import { GridWindowComponent } from "../components/grid-window/grid-window.component";
 
 export const config = environment.config.window as GridWindowConfig
 
-export class GridWindow extends GridUnit {
-  override component?: GridWindowComponent;
-  override details: GridWindowDetails = new GridWindowDetails();
-  override config: GridWindowConfig = new GridWindowConfig();
+export class GridWindow {
+  template?: any;
+  component?: GridWindowComponent;
+  details: GridWindowDetails = new GridWindowDetails();
+  config?: GridWindowConfig;
 
   active?: GridBox = undefined;
+
+  constructor() { }
 }
 
 export class GridWindowDetails {
@@ -18,11 +21,16 @@ export class GridWindowDetails {
   width: number = 0;
 }
 
-export class GridWindowConfig extends GridUnitConfig {
+export class GridWindowConfig implements IGridUnitConfig {
+  text?: TextConfig;
+  background?: BackgroundConfig;
+  line?: LineConfig;
   view!: GridWindowView;
   constructor() {
-    super(config.color)
-    this.view = config.view
+    this.text = new TextConfig(config?.text?.color)
+    this.background = new BackgroundConfig(config?.background?.color)    
+    this.line = new LineConfig(config?.line?.color)
+    this.view = config?.view
   }
 }
 

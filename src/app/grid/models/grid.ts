@@ -36,10 +36,10 @@ export class GridConfig {
   background!: BackgroundConfig;
   line!: LineConfig;
   text!: TextConfig;
-  box!: GridBoxConfig;
-  boxes!: GridBoxesConfig;
-  bar!: GridBarConfig;
-  window!: GridWindowConfig;
+  box?: GridBoxConfig;
+  boxes?: GridBoxesConfig;
+  bar?: GridBarConfig;
+  window?: GridWindowConfig;
 
   constructor() {
     this.size = config.size;
@@ -57,8 +57,8 @@ export class BackgroundConfig {
   color!: string;
   image?: string;
 
-  constructor() {
-    this.color = config.background.color;
+  constructor(color?: string) {
+    this.color = color ?? config.background.color;
     this.image = config.background.image;
   }
 }
@@ -67,17 +67,30 @@ export class LineConfig {
   color!: string;
   width!: number;
 
-  constructor() {
+  constructor(color?: string) {
+    this.color = color ?? config.line.color;
     this.width = config.line.width;
-    this.color = config.line.color;
   }
 }
 export class TextConfig {
   color!: string;
   fontFamily!: string;
-  
-  constructor() {
-    this.color = config.text!.color;
+
+  constructor(color?: string) {
+    this.color = color ?? config.text!.color;
     this.fontFamily = config.text!.fontFamily;
   }
+}
+
+export interface IGridUnit {
+  component?: any;
+  template?: any;
+  data?: any;
+  details?: any;
+}
+
+export interface IGridUnitConfig {
+  text?: TextConfig;
+  background?: BackgroundConfig;
+  line?: LineConfig;
 }
