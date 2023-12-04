@@ -12,7 +12,7 @@ export class GridBoxCollection {
     /**
      * ID of box
      */
-    [key: string]: GridBox | undefined
+    [key: string]: GridBox
   };
 }
 

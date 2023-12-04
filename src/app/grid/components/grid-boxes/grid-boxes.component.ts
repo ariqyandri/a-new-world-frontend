@@ -4,7 +4,7 @@ import { GridService } from '../../services/grid.service';
 import { GridBoxes, GridBoxesDetails } from '../../models/grid-boxes';
 import { GridBox } from '../../models/grid-box';
 import { GridBoxesService } from '../../services/grid-boxes.service';
-import { GridConfig, GridDetails } from '../../models/grid';
+import { GridConfig, GridDetails, GridStyleProperty } from '../../models/grid';
 
 @Component({
   selector: 'app-grid-boxes',
@@ -35,11 +35,8 @@ export class GridBoxesComponent implements OnDestroy, AfterViewInit {
   }
 
   register() {
-    this.gridService.draw()
-      .pipe(first())
-      .subscribe(() => {
-        this.boxesService.register(this)
-      })
+    firstValueFrom(this.gridService.draw())
+      .then(() => this.boxesService.register())
   }
 
   draw() {
@@ -55,10 +52,10 @@ export class GridBoxesComponent implements OnDestroy, AfterViewInit {
     if (!config) return;
 
     const el = this.el.nativeElement as HTMLElement;
-    el.style.background = config.boxes?.background?.color || config.background.color;    
+    el.style.background = config.boxes?.background?.color || config.background.color;
     el.style.setProperty('--translate', -config.line.width + 'px')
-    el.style.setProperty('--line-width', config.line.width + 'px')
-    el.style.setProperty('--line-color', config.line.color)
+    el.style.setProperty(GridStyleProperty.LINE_WIDTH, config.line.width + 'px')
+    el.style.setProperty(GridStyleProperty.LINE_COLOR, config.line.color)
   }
 
   build(config: GridConfig, details: GridDetails) {
@@ -72,7 +69,7 @@ export class GridBoxesComponent implements OnDestroy, AfterViewInit {
     el.style.gridTemplateColumns = `repeat(${columns}, ${(details.boxes?.width || details.width) / columns}px)`;
     el.style.gridTemplateRows = `repeat(${rows}, ${(details.boxes?.height || details.height) / rows}px)`;
     el.style.backgroundSize = `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`
-    el.style.setProperty('--box-size', `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`)
+    el.style.setProperty(GridStyleProperty.SIZE, `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`)
 
     if (this.boxes.length > 0) {
       this.boxes = [];

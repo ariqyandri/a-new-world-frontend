@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { GridBoxes, GridBoxesDetails } from '../models/grid-boxes';
 import { GridBoxesComponent } from '../components/grid-boxes/grid-boxes.component';
 import { GridService } from './grid.service';
-import { BehaviorSubject, Observable, filter, firstValueFrom, map } from 'rxjs';
+import { BehaviorSubject, Observable, debounceTime, filter, firstValueFrom, map } from 'rxjs';
 import { GridBox } from '../models/grid-box';
+import { GridBoxCollectionService } from './grid-box-collection.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,16 +14,21 @@ export class GridBoxesService {
 
   private _boxes?: GridBoxes
   constructor(
-    private gridService: GridService
+    private gridService: GridService,
+    private boxService: GridBoxCollectionService
   ) {
     this.boxes$.subscribe((res) => this._boxes = res);
+    this.boxService.getCollection('boxes')
+      .pipe(debounceTime(100))
+      .subscribe((res) => {
+        if (this._boxes) {          
+          this._boxes.elements = res ?? {}
+        }
+      })
   }
 
-  public register(component: GridBoxesComponent) {
-    let boxes = new GridBoxes();
-    boxes.component = component;
-
-    this._boxes = boxes
+  public register() {
+    this._boxes = new GridBoxes()
     this._update()
   }
 

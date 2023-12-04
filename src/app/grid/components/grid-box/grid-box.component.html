@@ -1,5 +1,7 @@
-<ng-container *ngIf="box$">
+<ng-container #vcr></ng-container>
+
+<ng-template #simpleTemplate let-data>
   <div class="h-full w-full flex justify-center items-center">
-    <div>{{ box.id }}</div>
+    <p *ngIf="data">{{ data.name || data.title || data }}</p>
   </div>
-</ng-container>
+</ng-template>

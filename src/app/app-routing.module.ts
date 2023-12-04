@@ -4,9 +4,18 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    loadChildren: () => import('./grid/grid.module').then((m) => m.GridModule),
-  },
+    loadChildren: () => import('./grid-app/grid-app.module').then((m) => m.GridAppModule),
+  }
+  // ,
+  // {
+  //   path: '',
+  //   children: [
+  //     {
+  //       path: 'app',
+  // loadChildren: () => import('./grid/grid.module').then((m) => m.GridModule),
+  //     }
+  //   ]
+  // },
 ];
 
 @NgModule({

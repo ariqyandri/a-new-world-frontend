@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, Input } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, combineLatest, first, firstValueFrom, map, mergeWith, takeUntil } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subject, combineLatest, first, map, mergeWith, takeUntil } from 'rxjs';
 import { GridService } from 'src/app/grid/services/grid.service';
 import { GridWindow, GridWindowView } from '../../models/grid-window';
 import { GridWindowService } from '../../services/grid-window.service';
@@ -26,20 +26,18 @@ export class GridWindowComponent {
     private gridService: GridService,
     private windowService: GridWindowService
   ) {
-    this.window$ = this.windowService.window$
+    this.window$ = this.windowService.window$;
   }
 
   ngAfterViewInit(): void {
     this.register();
-    this.draw()
+    this.draw();
+    this.construct();
   }
 
   register() {
-    this.gridService.draw()
-      .pipe(first())
-      .subscribe(() => {
-        this.windowService.register(this)
-      })
+    firstValueFrom(this.gridService.draw())
+      .then(() => this.windowService.register())
   }
 
   draw() {
@@ -49,11 +47,14 @@ export class GridWindowComponent {
         this.setStyling(config);
         this.build(config, details);
       })
-    combineLatest([this.gridService.draw(), this.windowService.active()])
+  }
+
+  construct() {
+    this.windowService.active()
       .pipe(takeUntil(this._destroyed$))
-      .subscribe(([grid, box]) => {
+      .subscribe((box) => {
         this.active$?.next(box);
-        this.setActive(box, grid.details);
+        this.setActive(box);
       })
   }
 
@@ -80,32 +81,20 @@ export class GridWindowComponent {
       case GridWindowView.WINDOW:
       default:
         el.style.height = (rows - 1) * details.boxHeight + 'px'
-        el.style.width = (columns / 2) * details.boxWidth + 'px'
+        el.style.width = (columns -1) * details.boxWidth + 'px'
         el.style.bottom = '0'
         el.style.right = '0'
         break;
     }
   }
 
-  async setActive(active?: GridBox, details?: GridDetails) {
-    if (!details) return;
-
+  async setActive(active?: GridBox) {
     const el = this.el.nativeElement as HTMLElement;
     if (active) {
       el.style.display = 'block'
     } else {
       el.style.display = 'none'
     }
-
-    // let divider = !(details.boxes.columns % 2) ? details.boxes.columns / 2 : (details.boxes.columns + 1) / 2
-
-    // if (active?.col + 1 > divider) {
-    //   el.style.left = '0'
-    //   el.style.right = 'unset'
-    // } else {
-    //   el.style.right = '0'
-    //   el.style.left = 'unset'
-    // }
   }
 
 

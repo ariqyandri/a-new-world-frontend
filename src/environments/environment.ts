@@ -8,7 +8,7 @@ export const environment: IEnvironment = createEnvironment({
   production: false,
   backend: 'http://localhost:8090',
   config: {
-    size: 150,
+    size: 125,
     background: {
       color: '#021c77',
       image: undefined
@@ -18,23 +18,23 @@ export const environment: IEnvironment = createEnvironment({
       fontFamily: 'Helvetica'
     },
     line: {
-      color: '#FFF',
+      color: '#01173d',
       width: 1
     },
-    // bar: {
-    //   background: {
-    //     color: '#021c77',
-    //     image: undefined
-    //   },
-    //   text: {
-    //     color: '#FFF',
-    //     fontFamily: 'Helvetica'
-    //   },
-    //   line: {
-    //     color: '#FFF',
-    //     width: 1
-    //   },
-    // },
+    bar: {
+      background: {
+        color: '#01173d',
+        image: undefined
+      },
+      text: {
+        color: '#FFF',
+        fontFamily: 'Helvetica'
+      },
+      line: {
+        color: '#021c77',
+        width: 1
+      },
+    },
     // window: {
     //   background: {
     //     color: '#021c77',
@@ -76,9 +76,9 @@ export const environment: IEnvironment = createEnvironment({
     //     color: '#FFF',
     //     width: 1
     //   },
-    // }
-  },
-});
+  }
+},
+);
 
 /*
  * For easier debugging in development mode, you can import the following file

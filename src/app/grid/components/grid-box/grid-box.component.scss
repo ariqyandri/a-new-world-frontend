@@ -2,7 +2,14 @@
   position: relative;
   display: flex;
   justify-content: center;
+  color: var(--text-color) !important;
+  font-family: var(--text-font-family)!important;
   cursor: pointer;
+
+  &.empty {
+    // pointer-events: none;
+    cursor: initial;
+  }
 
   &::after {
     content: "";
@@ -18,5 +25,21 @@
     &::after {
       opacity: 0.12;
     }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  i,
+  li,
+  span,
+  strong {
+    color: var(--text-color) !important;
+    font-family: var(--text-font-family)!important;
   }
 }

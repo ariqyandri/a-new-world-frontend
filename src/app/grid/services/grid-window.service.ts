@@ -19,15 +19,12 @@ export class GridWindowService {
     this.window$.subscribe((res) => this._window = res);
   }
 
-  public register(component: GridWindowComponent) {
-    let window = new GridWindow();
-    window.component = component
-
-    this._window = window;
+  public register() {
+    this._window = new GridWindow();
     this._update()
   }
 
-  public activate(box: GridBox): void {
+  public activate(box?: GridBox): void {
     if (this._window) {
       this._window.active = box;
       this._update();

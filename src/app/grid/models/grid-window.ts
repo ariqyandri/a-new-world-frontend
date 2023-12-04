@@ -1,15 +1,13 @@
 import { environment } from "src/environments/environment";
 import { GridBox } from "./grid-box";
 import { BackgroundConfig, IGridUnit, IGridUnitConfig, LineConfig, TextConfig } from "./grid";
-import { GridWindowComponent } from "../components/grid-window/grid-window.component";
 
 export const config = environment.config.window as GridWindowConfig
 
-export class GridWindow {
+export class GridWindow implements IGridUnit  {
   template?: any;
-  component?: GridWindowComponent;
   details: GridWindowDetails = new GridWindowDetails();
-  config?: GridWindowConfig;
+  config: GridWindowConfig = new GridWindowConfig();
 
   active?: GridBox = undefined;
 

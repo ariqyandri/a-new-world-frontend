@@ -1,9 +1,9 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { BehaviorSubject, Subject, first, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, firstValueFrom, takeUntil } from 'rxjs';
 import { GridService } from 'src/app/grid/services/grid.service';
 import { GridBarService } from '../../services/grid-bar.service';
 import { GridBar } from '../../models/grid-bar';
-import { GridConfig, GridDetails } from '../../models/grid';
+import { GridConfig, GridDetails, GridStyleProperty } from '../../models/grid';
 import { GridBox } from '../../models/grid-box';
 
 @Component({
@@ -37,11 +37,8 @@ export class GridBarComponent implements OnDestroy, AfterViewInit {
   }
 
   register() {
-    this.gridService.draw()
-      .pipe(first())
-      .subscribe(() => {
-        this.barService.register(this)
-      })
+    firstValueFrom(this.gridService.draw())
+      .then(() => this.barService.register())
   }
 
   draw() {
@@ -59,12 +56,12 @@ export class GridBarComponent implements OnDestroy, AfterViewInit {
     const el = this.el.nativeElement as HTMLElement;
     el.style.background = config.bar?.background?.color || config.background.color;
     el.style.color = config.bar?.text?.color || config.text.color;
-    el.style.fontFamily = config.text.fontFamily;
-    el.style.borderTopWidth = config.line.width + 'px';
-    el.style.borderTopColor = config.line.color;
-    el.style.setProperty('--translate', -config.line.width + 'px')
-    el.style.setProperty('--line-width', config.line.width + 'px')
-    el.style.setProperty('--line-color', config.line.color)
+    el.style.fontFamily = config.bar?.text?.fontFamily || config.text.fontFamily;
+    el.style.borderTopWidth = (config.bar?.line?.width || config.line.width) + 'px';
+    el.style.borderTopColor = config.bar?.line?.color || config.line.color;
+    el.style.setProperty('--translate', -(config.bar?.line?.width || config.line.width) + 'px')
+    el.style.setProperty(GridStyleProperty.LINE_WIDTH, (config.bar?.line?.width || config.line.width) + 'px')
+    el.style.setProperty(GridStyleProperty.LINE_COLOR, config.bar?.line?.color || config.line.color)
   }
 
   build(config?: GridConfig, details?: GridDetails) {
@@ -79,7 +76,7 @@ export class GridBarComponent implements OnDestroy, AfterViewInit {
     const boxesEl = this.boxesContainer?.nativeElement
     boxesEl.style.gridTemplateColumns = `repeat(${columns}, ${details.boxWidth}px)`;
     boxesEl.style.gridTemplateRows = `repeat(${rows}, ${details.boxHeight}px)`;
-    el.style.setProperty('--box-size', `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`)
+    el.style.setProperty(GridStyleProperty.SIZE, `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`)
 
     if (this.boxes.length > 0) {
       this.boxes = [];

@@ -3,4 +3,22 @@
   opacity: 1;
   z-index: 1000;
   top: 0;
+  color: var(--text-color) !important;
+  font-family: var(--text-font-family)!important;
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  i,
+  li,
+  span,
+  strong {
+    color: var(--text-color) !important;
+    font-family: var(--text-font-family)!important;
+  }
 }

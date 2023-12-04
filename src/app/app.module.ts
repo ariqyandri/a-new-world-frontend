@@ -13,7 +13,6 @@ import { GridModule } from './grid/grid.module';
   ],
   imports: [
     BrowserModule,
-    GridModule,
     AppRoutingModule,
     BrowserModule,
     HttpClientModule,

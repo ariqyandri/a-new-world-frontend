@@ -6,6 +6,7 @@ import { GridBoxes } from '../models/grid-boxes';
 import { GridWindow } from '../models/grid-window';
 import { GridBar } from '../models/grid-bar';
 import { BehaviorSubject, Observable, Subject, combineLatest, debounceTime, filter, firstValueFrom, map, mergeMap, pairwise } from 'rxjs';
+import { GridBoxCollection } from '../models/grid-box';
 
 
 @Injectable({
@@ -73,6 +74,9 @@ export class GridService {
           this._grid.window = val;
           this._grid.details.window = val.details;
           this._grid.config.window = val.config;
+          break;
+        case 'boxCollection':
+          this._grid.boxCollection = value as GridBoxCollection;
           break;
         case 'config':
           this._grid.config = value as GridConfig;

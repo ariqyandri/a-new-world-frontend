@@ -2,7 +2,7 @@ import { environment } from "src/environments/environment";
 import { GridBar, GridBarConfig, GridBarDetails } from "./grid-bar";
 import { GridBoxes, GridBoxesConfig, GridBoxesDetails } from "./grid-boxes";
 import { GridWindow, GridWindowConfig, GridWindowDetails } from "./grid-window";
-import { GridBoxConfig, GridBoxDetails } from "./grid-box";
+import { GridBoxCollection, GridBoxConfig, GridBoxDetails } from "./grid-box";
 
 export const config = environment.config as GridConfig
 
@@ -14,6 +14,7 @@ export class Grid {
   boxes?: GridBoxes;
   bar?: GridBar;
   window?: GridWindow;
+  boxCollection?: GridBoxCollection;
   details: GridDetails = new GridDetails();
   config: GridConfig = new GridConfig();
 }
@@ -51,6 +52,16 @@ export class GridConfig {
     this.bar = new GridBarConfig()
     this.window = new GridWindowConfig()
   }
+}
+
+export enum GridStyleProperty {
+  SIZE = '--size',
+  BACKGROUND_COLOR = '--background-color',
+  BACKGROUND_IMAGE = '--background-image',
+  LINE_COLOR = '--line-color',
+  LINE_WIDTH = '--line-width',
+  TEXT_COLOR = '--text-color',
+  TEXT_FONT_FAMILY = '--text-font-family',
 }
 
 export class BackgroundConfig {

@@ -7,11 +7,10 @@ export const config = environment.config.boxes as GridBoxesConfig
 
 export class GridBoxes implements IGridUnit {
   template?: any;
-  component?: GridBoxesComponent;
   details: GridBoxesDetails = new GridBoxesDetails();
   config: GridBoxesConfig = new GridBoxesConfig();
 
-  active?: GridBox;
+  active?: GridBox = undefined;
   elements: { [key: string]: GridBox } = {};
 
   constructor() { }
