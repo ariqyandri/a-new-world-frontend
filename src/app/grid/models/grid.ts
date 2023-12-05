@@ -3,6 +3,7 @@ import { GridBar, GridBarConfig, GridBarDetails } from "./grid-bar";
 import { GridBoxes, GridBoxesConfig, GridBoxesDetails } from "./grid-boxes";
 import { GridWindow, GridWindowConfig, GridWindowDetails } from "./grid-window";
 import { GridBoxCollection, GridBoxConfig, GridBoxDetails } from "./grid-box";
+import { GridDataCollection } from "./grid-data";
 
 export const config = environment.config as GridConfig
 
@@ -14,7 +15,8 @@ export class Grid {
   boxes?: GridBoxes;
   bar?: GridBar;
   window?: GridWindow;
-  boxCollection?: GridBoxCollection;
+  dataCollection?: GridDataCollection;
+
   details: GridDetails = new GridDetails();
   config: GridConfig = new GridConfig();
 }
@@ -78,9 +80,9 @@ export class LineConfig {
   color!: string;
   width!: number;
 
-  constructor(color?: string) {
+  constructor(color?: string, width?: number) {
     this.color = color ?? config.line.color;
-    this.width = config.line.width;
+    this.width = width ?? config.line.width;
   }
 }
 export class TextConfig {

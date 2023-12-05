@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { GridConfig, Grid, GridDetails } from '../models/grid';
 import { CookieHandler } from '../../common/handler/cookie.handler';
-import { DataService } from './data.service';
 import { GridBoxes } from '../models/grid-boxes';
 import { GridWindow } from '../models/grid-window';
 import { GridBar } from '../models/grid-bar';
 import { BehaviorSubject, Observable, Subject, combineLatest, debounceTime, filter, firstValueFrom, map, mergeMap, pairwise } from 'rxjs';
 import { GridBoxCollection } from '../models/grid-box';
+import { GridDataCollection } from '../models/grid-data';
 
 
 @Injectable({
@@ -22,8 +22,7 @@ export class GridService {
   private _grid?: Grid
 
   constructor(
-    private cookieHandler: CookieHandler,
-    private dataService: DataService
+    private cookieHandler: CookieHandler
   ) {
     this.grid$.subscribe((grid) => this._grid = grid)
 
@@ -75,8 +74,8 @@ export class GridService {
           this._grid.details.window = val.details;
           this._grid.config.window = val.config;
           break;
-        case 'boxCollection':
-          this._grid.boxCollection = value as GridBoxCollection;
+        case 'dataCollection':
+          this._grid.dataCollection = value as GridDataCollection;
           break;
         case 'config':
           this._grid.config = value as GridConfig;

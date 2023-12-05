@@ -54,14 +54,11 @@ export class GridBarComponent implements OnDestroy, AfterViewInit {
     if (!config) return;
 
     const el = this.el.nativeElement as HTMLElement;
+    el.style.border = `${config.bar?.line?.width || config.line.width}px ${config.bar?.line?.color || config.line.color} solid`
+    el.style.borderTop = 'none'
     el.style.background = config.bar?.background?.color || config.background.color;
     el.style.color = config.bar?.text?.color || config.text.color;
     el.style.fontFamily = config.bar?.text?.fontFamily || config.text.fontFamily;
-    el.style.borderTopWidth = (config.bar?.line?.width || config.line.width) + 'px';
-    el.style.borderTopColor = config.bar?.line?.color || config.line.color;
-    el.style.setProperty('--translate', -(config.bar?.line?.width || config.line.width) + 'px')
-    el.style.setProperty(GridStyleProperty.LINE_WIDTH, (config.bar?.line?.width || config.line.width) + 'px')
-    el.style.setProperty(GridStyleProperty.LINE_COLOR, config.bar?.line?.color || config.line.color)
   }
 
   build(config?: GridConfig, details?: GridDetails) {
@@ -76,7 +73,6 @@ export class GridBarComponent implements OnDestroy, AfterViewInit {
     const boxesEl = this.boxesContainer?.nativeElement
     boxesEl.style.gridTemplateColumns = `repeat(${columns}, ${details.boxWidth}px)`;
     boxesEl.style.gridTemplateRows = `repeat(${rows}, ${details.boxHeight}px)`;
-    el.style.setProperty(GridStyleProperty.SIZE, `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`)
 
     if (this.boxes.length > 0) {
       this.boxes = [];

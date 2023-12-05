@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, firstValueFrom, map } from 'rxjs';
-import { GridWindowComponent } from '../components/grid-window/grid-window.component';
 import { GridWindow } from '../models/grid-window';
 import { GridService } from './grid.service';
 import { GridBox } from '../models/grid-box';
@@ -14,7 +13,7 @@ export class GridWindowService {
 
   private _window?: GridWindow;
   constructor(
-    private gridService: GridService
+    private gridService: GridService,
   ) {
     this.window$.subscribe((res) => this._window = res);
   }

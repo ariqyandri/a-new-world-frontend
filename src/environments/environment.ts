@@ -8,17 +8,17 @@ export const environment: IEnvironment = createEnvironment({
   production: false,
   backend: 'http://localhost:8090',
   config: {
-    size: 125,
+    size: 150,
     background: {
       color: '#021c77',
       image: undefined
     },
     text: {
-      color: '#FFF',
+      color: 'white',
       fontFamily: 'Helvetica'
     },
     line: {
-      color: '#01173d',
+      color: '#FFF',
       width: 1
     },
     bar: {
@@ -63,19 +63,20 @@ export const environment: IEnvironment = createEnvironment({
     //     width: 1
     //   },
     // },
-    // boxes: {
-    //   background: {
-    //     color: '#021c77',
-    //     image: undefined
-    //   },
-    //   text: {
-    //     color: '#FFF',
-    //     fontFamily: 'Helvetica'
-    //   },
-    //   line: {
-    //     color: '#FFF',
-    //     width: 1
-    //   },
+    boxes: {
+      background: {
+        color: '#021c77',
+        image: undefined
+      },
+      text: {
+        color: '#FFF',
+        fontFamily: 'Helvetica'
+      },
+      line: {
+        color: '#01173d',
+        width: 1
+      }
+    }
   }
 },
 );

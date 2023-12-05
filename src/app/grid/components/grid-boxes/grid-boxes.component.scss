@@ -4,32 +4,11 @@
   max-width: 100%;
   margin: 0 auto;
   overflow: hidden;
+  border: 1px solid white;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  &::after {
-    content: "";
-    display: block;
-    background: transparent;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: var(--translate);
-    left: var(--translate);
-    background-image: linear-gradient(
-        var(--line-color) var(--line-width),
-        transparent var(--line-width)
-      ),
-      linear-gradient(
-        90deg,
-        var(--line-color) var(--line-width),
-        transparent var(--line-width)
-      );
-    background-size: var(--size);
-    pointer-events: none;
   }
 }

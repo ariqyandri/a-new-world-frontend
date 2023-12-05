@@ -8,6 +8,7 @@ export class GridWindow implements IGridUnit  {
   template?: any;
   details: GridWindowDetails = new GridWindowDetails();
   config: GridWindowConfig = new GridWindowConfig();
+  data: any
 
   active?: GridBox = undefined;
 
@@ -27,7 +28,7 @@ export class GridWindowConfig implements IGridUnitConfig {
   constructor() {
     this.text = new TextConfig(config?.text?.color)
     this.background = new BackgroundConfig(config?.background?.color)    
-    this.line = new LineConfig(config?.line?.color)
+    this.line = new LineConfig(config?.line?.color, config?.line?.width)
     this.view = config?.view
   }
 }

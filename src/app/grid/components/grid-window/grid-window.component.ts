@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, TemplateRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Subject, combineLatest, first, map, mergeWith, takeUntil } from 'rxjs';
 import { GridService } from 'src/app/grid/services/grid.service';
 import { GridWindow, GridWindowView } from '../../models/grid-window';
@@ -14,6 +14,10 @@ import { GridConfig, GridDetails } from '../../models/grid';
 export class GridWindowComponent {
   public window$?: BehaviorSubject<GridWindow | undefined>
   public active$?: BehaviorSubject<GridBox | undefined>
+
+  @ViewChild('simpleTemplate', { read: TemplateRef }) simpleTemplate!: TemplateRef<any>;
+  @ViewChild('vcr', { static: true, read: ViewContainerRef }) vcr!: ViewContainerRef;
+  private _cdr = inject(ChangeDetectorRef)
 
   private _destroyed$ = new Subject<void>()
   ngOnDestroy(): void {
@@ -62,6 +66,7 @@ export class GridWindowComponent {
     if (!config) return;
 
     const el = this.el.nativeElement as HTMLElement;
+    el.style.border = `${config.window?.line?.width || config.line.width}px ${config.window?.line?.color || config.line.color} solid`
     el.style.background = config.window?.background?.color || config.background.color;
     el.style.minWidth = config.size + 'px'
     el.style.color = config.window?.text?.color || config.text.color
@@ -81,7 +86,7 @@ export class GridWindowComponent {
       case GridWindowView.WINDOW:
       default:
         el.style.height = (rows - 1) * details.boxHeight + 'px'
-        el.style.width = (columns -1) * details.boxWidth + 'px'
+        el.style.width = (columns - 1) * details.boxWidth + 'px'
         el.style.bottom = '0'
         el.style.right = '0'
         break;

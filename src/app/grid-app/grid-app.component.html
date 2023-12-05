@@ -2,4 +2,13 @@
 <app-grid></app-grid>
 <!--  -->
 
+<ng-template #box let-data>
+  <div
+    class="h-full w-full flex justify-center items-center"
+    (click)="onClick(data)"
+  >
+    <p *ngIf="data">{{ data.name || data.title || data }}</p>
+  </div>
+</ng-template>
+
 <router-outlet></router-outlet>

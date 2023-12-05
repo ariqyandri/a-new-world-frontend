@@ -3,11 +3,12 @@
   display: flex;
   justify-content: center;
   color: var(--text-color) !important;
-  font-family: var(--text-font-family)!important;
+  font-family: var(--text-font-family) !important;
   cursor: pointer;
+  overflow: visible;
 
   &.empty {
-    // pointer-events: none;
+    pointer-events: none;
     cursor: initial;
   }
 
@@ -15,31 +16,42 @@
     content: "";
     display: block;
     position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    opacity: 0;
+    height: calc(100% + var(--line-width));
+    width: calc(100% + var(--line-width));
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    background-color: rgba(255, 255, 255, 0);
+    border: var(--line-width) solid var(--line-color);
+    pointer-events: none;
+    cursor: pointer;
   }
 
   &:hover {
     &::after {
-      opacity: 0.12;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  ::ng-deep {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    a,
+    i,
+    li,
+    span,
+    strong {
+      color: var(--text-color) !important;
+      font-family: var(--text-font-family) !important;
     }
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  a,
-  i,
-  li,
-  span,
-  strong {
-    color: var(--text-color) !important;
-    font-family: var(--text-font-family)!important;
+  ::ng-deep.empty {
+    pointer-events: none;
+    cursor: initial;
   }
 }

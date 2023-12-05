@@ -5,20 +5,17 @@ import { environment } from "src/environments/environment";
 export const config = environment.config.boxes as GridBoxConfig
 
 export class GridBoxCollection {
-  /**
-   * Name of collection
-   */
-  [key: string]: {
-    /**
-     * ID of box
-     */
+  bar?: {
     [key: string]: GridBox
-  };
+  }
+
+  boxes?: {
+    [key: string]: GridBox
+  }
+
 }
 
 export class GridBox implements IGridUnit {
-  template: any;
-  component?: GridBoxComponent;
   details: GridBoxDetails = new GridBoxDetails();
   config: GridBoxConfig = new GridBoxConfig();
   data: any
@@ -28,7 +25,7 @@ export class GridBox implements IGridUnit {
   row!: number;
   col!: number;
   get id() {
-    return `${this.index}:${this.row}:${this.col}`
+    return `${this.row}:${this.col}`
   };
 
   constructor(index: number, row: number, col: number) {
@@ -49,7 +46,7 @@ export class GridBoxConfig implements IGridUnitConfig {
   line?: LineConfig;
   constructor() {
     this.text = new TextConfig(config?.text?.color)
-    this.background = new BackgroundConfig(config?.background?.color)    
-    this.line = new LineConfig(config?.line?.color)
+    this.background = new BackgroundConfig(config?.background?.color)
+    this.line = new LineConfig(config?.line?.color, config?.line?.width)
   }
 }

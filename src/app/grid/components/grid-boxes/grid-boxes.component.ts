@@ -52,10 +52,8 @@ export class GridBoxesComponent implements OnDestroy, AfterViewInit {
     if (!config) return;
 
     const el = this.el.nativeElement as HTMLElement;
+    el.style.border = `${config.boxes?.line?.width || config.line.width}px ${config.boxes?.line?.color || config.line.color} solid`
     el.style.background = config.boxes?.background?.color || config.background.color;
-    el.style.setProperty('--translate', -config.line.width + 'px')
-    el.style.setProperty(GridStyleProperty.LINE_WIDTH, config.line.width + 'px')
-    el.style.setProperty(GridStyleProperty.LINE_COLOR, config.line.color)
   }
 
   build(config: GridConfig, details: GridDetails) {
@@ -65,11 +63,10 @@ export class GridBoxesComponent implements OnDestroy, AfterViewInit {
 
     const el = this.el.nativeElement as HTMLElement;
     el.style.height = details.height - details.boxHeight + 'px';
+    el.style.maxHeight = details.height - details.boxHeight + 'px';
     el.style.width = (details.boxes?.width || details.width) + 'px';
     el.style.gridTemplateColumns = `repeat(${columns}, ${(details.boxes?.width || details.width) / columns}px)`;
     el.style.gridTemplateRows = `repeat(${rows}, ${(details.boxes?.height || details.height) / rows}px)`;
-    el.style.backgroundSize = `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`
-    el.style.setProperty(GridStyleProperty.SIZE, `${(details.boxes?.width || details.width) / columns}px ${(details.boxes?.height || details.height) / rows}px`)
 
     if (this.boxes.length > 0) {
       this.boxes = [];

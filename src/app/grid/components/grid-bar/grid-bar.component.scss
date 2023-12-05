@@ -1,11 +1,12 @@
 :host {
   display: block;
   position: absolute;
-  box-sizing: content-box;
   left: 0;
   bottom: 0;
   width: 100%;
   z-index: 1001;
+  overflow: hidden;
+  border-top: none;
 }
 
 .boxes {
@@ -13,6 +14,7 @@
   position: block;
   max-width: 100%;
   margin: 0 auto;
+  box-sizing: content-box;
   overflow: hidden;
 
   -ms-overflow-style: none;  /* IE and Edge */
@@ -21,25 +23,25 @@
     display: none;
   }
 
-  &::after {
-    content: "";
-    display: block;
-    background: transparent;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: var(--translate);
-    left: var(--translate);
-    background-image: linear-gradient(
-        var(--line-color) var(--line-width),
-        transparent var(--line-width)
-      ),
-      linear-gradient(
-        90deg,
-        var(--line-color) var(--line-width),
-        transparent var(--line-width)
-      );
-    background-size: var(--size);
-    pointer-events: none;
-  }
+  // &::after {
+  //   content: "";
+  //   display: block;
+  //   background: transparent;
+  //   height: calc(100% + var(--line-width));
+  //   width: calc(100% + var(--line-width));
+  //   position: absolute;
+  //   top: var(--translate);
+  //   left: var(--translate);
+  //   background-image: linear-gradient(
+  //       var(--line-color) var(--line-width),
+  //       transparent var(--line-width)
+  //     ),
+  //     linear-gradient(
+  //       90deg,
+  //       var(--line-color) var(--line-width),
+  //       transparent var(--line-width)
+  //     );
+  //   background-size: var(--size);
+  //   pointer-events: none;
+  // }
 }
